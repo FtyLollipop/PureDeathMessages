@@ -23,7 +23,7 @@ function deathEventHandler(mob, source, cause, entity, message, map) {
     if(!mob.isPlayer()) { return null }
     msg = message?.[map.exception?.[source?.type]?.[cause]] ?? null
     if(!msg) {
-        msg = message?.[map?.[cause]] ?? `%s${message['death.attack.generic']} %插件消息数据需要更新 source:${args[0]} cause:${cause}%`
+        msg = message?.[map?.[cause]] ?? `${message['death.attack.generic']} %插件消息数据需要更新 source:${args[0]} cause:${cause}%`
     }
     args.push(mob.name)
     if(source) {
