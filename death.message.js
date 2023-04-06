@@ -1,4 +1,4 @@
-let config = new JsonConfigFile('plugins/death.message/config.json', {'groups': [], 'edition': 'java'})
+let config = new JsonConfigFile('plugins/death.message/config.json', '{"groups": [], "edition": "java"}')
 let entityData = (new JsonConfigFile(`plugins/death.message/resources/entity.json`)).get(config.get('edition'))
 let messageData = (new JsonConfigFile(`plugins/death.message/resources/message.json`)).get(config.get('edition'))
 let mapData = (new JsonConfigFile('plugins/death.message/resources/map.json')).get("map")
