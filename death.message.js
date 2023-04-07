@@ -4,10 +4,10 @@ let messageData = (new JsonConfigFile(`plugins/death.message/resources/message.j
 let mapData = (new JsonConfigFile('plugins/death.message/resources/map.json')).get("map")
 
 ll.registerPlugin('death.message', '死亡信息转发', [1,0,0])
+logger.setConsole(config.get('islogprt'))
+logger.setFile(config.get('islogfile') ? 'logs/death.message.log' : null)
 
 mc.listen('onMobDie', (mob, source, cause) => {
-    logger.setConsole(config.get('islogprt'))
-    logger.setFile(config.get('islogfile') ? 'logs/death.message.log' : null)
     let msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData)
     if(msg) logger.info(msg)
 })
