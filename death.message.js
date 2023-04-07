@@ -9,7 +9,7 @@ mc.listen('onMobDie', (mob, source, cause) => {
     logger.setConsole(config.get('islogprt'))
     logger.setFile(config.get('islogfile') ? 'logs/death.message.log' : null)
     let msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData)
-    if(msg) logger.log(msg)
+    if(msg) logger.info(msg)
 })
 
 function stringFormat(str, args) {
