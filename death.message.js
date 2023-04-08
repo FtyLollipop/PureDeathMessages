@@ -7,14 +7,14 @@ ll.registerPlugin('death.message', '死亡信息转发', [1,0,0])
 logger.setConsole(config.get('islogprt'))
 logger.setFile(config.get('islogfile') ? 'logs/death.message.log' : null)
 
-let lastDamageItemName = {}
-
 mc.listen('onMobDie', (mob, source, cause) => {
     const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData)
     if(msg) logger.info(msg)
 })
 
 mc.listen('onMobHurt', hurtEventHandler)
+
+let lastDamageItemName = {}
 
 function stringFormat(str, args) {
     const regex = /%s/
@@ -45,16 +45,31 @@ function deathEventHandler(mob, source, cause, entity, message, map) {
     } else {
         msg = message?.[map.exception?.[source?.type]?.[cause]] ?? null
     }
-    if(!msg) {
-        msg = message?.[map?.[cause]] ?? `${message['death.attack.generic']} %插件消息数据需要更新 source:${args[0]} cause:${cause}%`
-    }
     args.push(mob.name)
     if(source) {
         args.push(entity?.[source?.type] ?? source?.name)
+    }
+    if(lastDamageItemName[mob.name]){
+        msg = message['death.attack.player.item']
+        args.push(lastDamageItemName[mob.name])
+    }
+    if(!msg) {
+        msg = message?.[map?.[cause]] ?? `${message['death.attack.generic']} %插件消息数据需要更新 source:${args[0]} cause:${cause}%`
     }
     return stringFormat(msg, args)
 }
 
 function hurtEventHandler(mob, source, damage, cause) {
-
+    if(!mob.isPlayer()) { return }
+    if(!source?.isPlayer() || cause !== 2) {
+        delete lastDamageItemName[mob.name]
+        return
+    }
+    const item = mc.getPlayer(source.name).getHand()
+    const itemNameNbt = item?.getNbt()?.getTag('tag')?.getTag('display')?.getTag('Name')
+    if(itemNameNbt) {
+        lastDamageItemName[mob.name] = itemNameNbt.toString()
+    } else {
+        delete lastDamageItemName[mob.name]
+    }
 }
