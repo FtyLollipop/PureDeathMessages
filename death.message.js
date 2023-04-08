@@ -7,10 +7,14 @@ ll.registerPlugin('death.message', '死亡信息转发', [1,0,0])
 logger.setConsole(config.get('islogprt'))
 logger.setFile(config.get('islogfile') ? 'logs/death.message.log' : null)
 
+let lastDamageItemName = {}
+
 mc.listen('onMobDie', (mob, source, cause) => {
     const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData)
     if(msg) logger.info(msg)
 })
+
+mc.listen('onMobHurt', hurtEventHandler)
 
 function stringFormat(str, args) {
     const regex = /%s/
@@ -49,4 +53,8 @@ function deathEventHandler(mob, source, cause, entity, message, map) {
         args.push(entity?.[source?.type] ?? source?.name)
     }
     return stringFormat(msg, args)
+}
+
+function hurtEventHandler(mob, source, damage, cause) {
+
 }
