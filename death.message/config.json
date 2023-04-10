@@ -9,6 +9,8 @@
         "minecraft:player": true,
         "minecraft:worf": true
     },
-    "islogprt": true,
-    "islogfile": true
+    "enableMobCustonName": true,
+    "enableItemCustonName": true,
+    "isLogPrt": true,
+    "isLogFile": true
 }
