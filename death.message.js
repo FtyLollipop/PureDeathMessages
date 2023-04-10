@@ -9,7 +9,7 @@ const defaultEnabledEntity = {
     "minecraft:horse": true,
     "minecraft:mule": true,
     "minecraft:player": true,
-    "minecraft:worf": true
+    "minecraft:wolf": true
 }
 const enableMobCustomName = config.get('enableMobCustomName')
 const enableItemCustomName = config.get('enableItemCustomName')
@@ -20,10 +20,10 @@ logger.setConsole(config.get('isLogPrt'))
 logger.setFile(config.get('isLogFile') ? 'logs/death.message.log' : null)
 
 mc.listen('onMobHurt', (mob, source, damage, cause) => {
-    hurtEventHandler(mob, source, cause, enabledEntity)
+    hurtEventHandler(mob, source, cause, enabledEntity, false)
 })
 mc.listen('onMobDie', (mob, source, cause) => {
-    const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData, enabledEntity)
+    const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData, enabledEntity, enableMobCustomName)
     if(msg) logger.info(msg)
 })
 
@@ -44,7 +44,6 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
     let msg = null
     let args = []
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return null }
-    delete lastDamageItemName[mob.uniqueId]
 
     // const pos = mc.getPlayer(mob.name).lastDeathPos
     // if(cause === 1) {
@@ -69,12 +68,13 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
     args.push(getCustomName(mob) ?? entity?.[mob?.type] ?? mob.name)
 
     if(source) {
-        args.push(getCustomName(mob) ?? entity?.[source.type] ?? source.name)
+        args.push(getCustomName(source) ?? entity?.[source.type] ?? source.name)
     }
 
-    if(lastDamageItemName[mob.uniqueId]){
+    if(lastDamageItemName[mob.uniqueId]  && cause === 2){
         msg = message['death.attack.player.item']
         args.push(lastDamageItemName[mob.uniqueId])
+        delete lastDamageItemName[mob.uniqueId]
     }
     if(!msg) {
         msg = message?.[map?.[cause]] ?? `${message['death.attack.generic']} %插件消息数据需要更新 source:${args[0]} cause:${cause}%`
@@ -90,8 +90,8 @@ function hurtEventHandler(mob, source, cause, enabledEntity = defaultEnabledEnti
     }
     const item = mc.getPlayer(source.uniqueId).getHand()
     const itemNameNbt = item?.getNbt()?.getTag('tag')?.getTag('display')?.getTag('Name')
-    if(enableItemCustomName && itemNameNbt) {
-        lastDamageItemName[mob.uniqueId] = itemNameNbt.toString()
+    if(itemNameNbt) {
+        lastDamageItemName[mob.uniqueId] = enableItemCustomName ? itemNameNbt.toString() : item.type
     } else {
         delete lastDamageItemName[mob.uniqueId]
     }
