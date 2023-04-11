@@ -1,9 +1,10 @@
 {
     "map": {
         "exception": {
-            "minecraft:arrow": {"3": "death.attack.player"},
+            "minecraft:arrow": {"3": "death.attack.mob"},
             "minecraft:blaze": {"3": "death.attack.fireball"},
             "minecraft:drowned": {"3": "death.attack.trident"},
+            "minecraft:ender_dragon": {"14": "death.attack.indirectMagic"},
             "minecraft:evocation_illager": {"14": "death.attack.indirectMagic"},
             "minecraft:ghast": {"3": "death.attack.mob"},
             "minecraft:llama": {"3": "death.attack.spit"},
