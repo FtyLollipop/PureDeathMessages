@@ -20,7 +20,7 @@ logger.setConsole(config.get('isLogPrt'))
 logger.setFile(config.get('isLogFile') ? 'logs/death.message.log' : null)
 
 mc.listen('onMobHurt', (mob, source, damage, cause) => {
-    hurtEventHandler(mob, source, cause, enabledEntity, false)
+    hurtEventHandler(mob, source, cause, enabledEntity, enableItemCustomName)
 })
 mc.listen('onMobDie', (mob, source, cause) => {
     const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData, enabledEntity, enableMobCustomName)
@@ -97,10 +97,10 @@ function hurtEventHandler(mob, source, cause, enabledEntity = defaultEnabledEnti
         const item = mc.getPlayer(source.uniqueId).getHand()
         const itemNameNbt = item?.getNbt()?.getTag('tag')?.getTag('display')?.getTag('Name')
         if(itemNameNbt) {
-            lastDamageCause[mob.uniqueId]['itemName'] = enableItemCustomName ? itemNameNbt.toString() : mc.newItem(item.type, 1).name
+            lastDamageCause[mob.uniqueId] = {'itemName' : enableItemCustomName ? itemNameNbt.toString() : mc.newItem(item.type, 1).name}
         }
     } else if(cause === 1) {
         let pos = mob.blockPos
-        lastDamageCause[uniqueId]['position'] = {x: pos.x, y: pos.y, z: pos.z, dimid: pos.dimid}
+        lastDamageCause[mob.uniqueId] = {'position' : {x: pos.x, y: pos.y, z: pos.z, dimid: pos.dimid}}
     }
 }
