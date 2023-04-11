@@ -61,6 +61,7 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
 
     if(cause === 1 && lastDamageCause[mob.uniqueId]?.['position']) {
         let pos = lastDamageCause[mob.uniqueId]?.['position']
+        delete lastDamageItemName[mob.uniqueId]
         for(let x = -1; x <= 1; x++) {
             for(let y = -2; y <= 1; y++) {
                 for(let z = -1; z <= 1; z++) {
