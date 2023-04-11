@@ -13,7 +13,7 @@ const defaultEnabledEntity = {
 }
 const enableMobCustomName = config.get('enableMobCustomName')
 const enableItemCustomName = config.get('enableItemCustomName')
-let lastDamageItemName = {}
+let lastDamageCause = {}
 
 ll.registerPlugin('death.message', '死亡信息转发', [1,0,0])
 logger.setConsole(config.get('isLogPrt'))
@@ -45,35 +45,35 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
     let args = []
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return null }
 
-    // const pos = mc.getPlayer(mob.name).lastDeathPos
-    // if(cause === 1) {
-    //     for(let x = -1; x <= 1; x++) {
-    //         for(let y = -2; y <= 1; y++) {
-    //             for(let z = -1; z <= 1; z++) {
-    //                 const block = mc.getBlock(pos.x + x, pos.y + y, pos.z + z, pos.dimid)?.type
-    //                 if(block === 'minecraft:cactus') {
-    //                     msg = message['death.attack.cactus']
-    //                     break
-    //                 } else if (block === 'minecraft:sweet_berry_bush') {
-    //                     msg = message['death.attack.sweetBerry']
-    //                     break
-    //                 }
-    //             }
-    //         }
-    //     }
-    // } else {
-    //     msg = message?.[map.exception?.[source?.type]?.[cause]] ?? null
-    // }
-
-    args.push(getCustomName(mob) ?? entity?.[mob?.type] ?? mob.name)
-
-    if(source) {
-        args.push(getCustomName(source) ?? entity?.[source.type] ?? source.name)
+    if(cause === 1 && lastDamageCause[mob.uniqueId]?.['position']) {
+        let pos = lastDamageCause[mob.uniqueId]?.['position']
+        for(let x = -1; x <= 1; x++) {
+            for(let y = -2; y <= 1; y++) {
+                for(let z = -1; z <= 1; z++) {
+                    const block = mc.getBlock(pos.x + x, pos.y + y, pos.z + z, pos.dimid)?.type
+                    if(block === 'minecraft:cactus') {
+                        msg = message['death.attack.cactus']
+                        break
+                    } else if (block === 'minecraft:sweet_berry_bush') {
+                        msg = message['death.attack.sweetBerry']
+                        break
+                    }
+                }
+            }
+        }
+    } else {
+        msg = message?.[map.exception?.[source?.type]?.[cause]] ?? null
     }
 
-    if(lastDamageItemName[mob.uniqueId]  && cause === 2){
+    args.push(getCustomName(mob) ?? entity?.[mob.type] ?? enableMobCustomName ? mob.name : mob.type)
+
+    if(source) {
+        args.push(getCustomName(source) ?? entity?.[source.type] ?? enableMobCustomName ? source.name : source.type)
+    }
+
+    if(cause === 2 && lastDamageCause[mob.uniqueId]?.['itemName']){
         msg = message['death.attack.player.item']
-        args.push(lastDamageItemName[mob.uniqueId])
+        args.push(lastDamageCause[mob.uniqueId]?.['itemName'])
         delete lastDamageItemName[mob.uniqueId]
     }
     if(!msg) {
@@ -84,15 +84,15 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
 
 function hurtEventHandler(mob, source, cause, enabledEntity = defaultEnabledEntity, enableItemCustomName = true) {
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return }
-    if(!source?.isPlayer() || cause !== 2) {
-        delete lastDamageItemName[mob.uniqueId]
-        return
-    }
-    const item = mc.getPlayer(source.uniqueId).getHand()
-    const itemNameNbt = item?.getNbt()?.getTag('tag')?.getTag('display')?.getTag('Name')
-    if(itemNameNbt) {
-        lastDamageItemName[mob.uniqueId] = enableItemCustomName ? itemNameNbt.toString() : item.type
-    } else {
-        delete lastDamageItemName[mob.uniqueId]
+    delete lastDamageCause[mob.uniqueId]
+    if(source?.isPlayer() && cause === 2) {
+        const item = mc.getPlayer(source.uniqueId).getHand()
+        const itemNameNbt = item?.getNbt()?.getTag('tag')?.getTag('display')?.getTag('Name')
+        if(itemNameNbt) {
+            lastDamageCause[mob.uniqueId]['itemName'] = enableItemCustomName ? itemNameNbt.toString() : item.type
+        }
+    } else if(cause === 1) {
+        let pos = mob.blockPos
+        lastDamageCause[uniqueId]['position'] = {'x': pos.x, 'y': pos.y, 'z': pos.z}
     }
 }
