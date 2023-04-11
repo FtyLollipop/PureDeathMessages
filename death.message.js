@@ -55,7 +55,7 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
         if(enableMobCustomName) {
             args.push(getCustomName(source) ?? entity?.[source.type] ?? source.name)
         } else {
-            args.push(entity?.[source.type] ?? source.type)
+            args.push(entity?.[source.type] ?? getCustomName(source) ? source.type : source.name)
         }
     }
 
