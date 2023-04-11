@@ -45,6 +45,20 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
     let args = []
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return null }
 
+    if(enableMobCustomName) {
+        args.push(getCustomName(mob) ?? entity?.[mob.type] ?? mob.name)
+    } else {
+        args.push(entity?.[mob.type] ?? mob.type)
+    }
+
+    if(source) {
+        if(enableMobCustomName) {
+            args.push(getCustomName(source) ?? entity?.[source.type] ?? source.name)
+        } else {
+            args.push(entity?.[source.type] ?? source.type)
+        }
+    }
+
     if(cause === 1 && lastDamageCause[mob.uniqueId]?.['position']) {
         let pos = lastDamageCause[mob.uniqueId]?.['position']
         for(let x = -1; x <= 1; x++) {
@@ -61,21 +75,14 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
                 }
             }
         }
+    } else if(cause === 2 && lastDamageCause[mob.uniqueId]?.['itemName']){
+        msg = message['death.attack.player.item']
+        args.push(lastDamageCause[mob.uniqueId]?.['itemName'])
+        delete lastDamageItemName[mob.uniqueId]
     } else {
         msg = message?.[map.exception?.[source?.type]?.[cause]] ?? null
     }
 
-    args.push(getCustomName(mob) ?? entity?.[mob.type] ?? enableMobCustomName ? mob.name : mob.type)
-
-    if(source) {
-        args.push(getCustomName(source) ?? entity?.[source.type] ?? enableMobCustomName ? source.name : source.type)
-    }
-
-    if(cause === 2 && lastDamageCause[mob.uniqueId]?.['itemName']){
-        msg = message['death.attack.player.item']
-        args.push(lastDamageCause[mob.uniqueId]?.['itemName'])
-        delete lastDamageItemName[mob.uniqueId]
-    }
     if(!msg) {
         msg = message?.[map?.[cause]] ?? `${message['death.attack.generic']} %插件消息数据需要更新 source:${args[0]} cause:${cause}%`
     }
@@ -89,7 +96,7 @@ function hurtEventHandler(mob, source, cause, enabledEntity = defaultEnabledEnti
         const item = mc.getPlayer(source.uniqueId).getHand()
         const itemNameNbt = item?.getNbt()?.getTag('tag')?.getTag('display')?.getTag('Name')
         if(itemNameNbt) {
-            lastDamageCause[mob.uniqueId]['itemName'] = enableItemCustomName ? itemNameNbt.toString() : item.type
+            lastDamageCause[mob.uniqueId]['itemName'] = enableItemCustomName ? itemNameNbt.toString() : mc.newItem(item.type, 1).name
         }
     } else if(cause === 1) {
         let pos = mob.blockPos
