@@ -101,6 +101,6 @@ function hurtEventHandler(mob, source, cause, enabledEntity = defaultEnabledEnti
         }
     } else if(cause === 1) {
         let pos = mob.blockPos
-        lastDamageCause[uniqueId]['position'] = {x: pos.x, y: pos.y, z: pos.z}
+        lastDamageCause[uniqueId]['position'] = {x: pos.x, y: pos.y, z: pos.z, dimid: pos.dimid}
     }
 }
