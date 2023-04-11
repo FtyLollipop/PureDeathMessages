@@ -1,4 +1,4 @@
-const config = new JsonConfigFile('plugins/death.message/config.json', '{"groups": [], "edition": "java"}')
+const config = new JsonConfigFile('plugins/death.message/config.json')
 const entityData = (new JsonConfigFile(`plugins/death.message/resources/entity.json`)).get(config.get('edition'))
 const messageData = (new JsonConfigFile(`plugins/death.message/resources/message.json`)).get(config.get('edition'))
 const mapData = (new JsonConfigFile('plugins/death.message/resources/map.json')).get("map")
@@ -61,7 +61,7 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
 
     if(cause === 1 && lastDamageCause[mob.uniqueId]?.['position']) {
         let pos = lastDamageCause[mob.uniqueId]?.['position']
-        delete lastDamageItemName[mob.uniqueId]
+        delete lastDamageCause[mob.uniqueId]
         for(let x = -1; x <= 1; x++) {
             for(let y = -2; y <= 1; y++) {
                 for(let z = -1; z <= 1; z++) {
@@ -79,7 +79,7 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
     } else if(cause === 2 && lastDamageCause[mob.uniqueId]?.['itemName']){
         msg = message['death.attack.player.item']
         args.push(lastDamageCause[mob.uniqueId]?.['itemName'])
-        delete lastDamageItemName[mob.uniqueId]
+        delete lastDamageCause[mob.uniqueId]
     } else {
         msg = message?.[map.exception?.[source?.type]?.[cause]] ?? null
     }
