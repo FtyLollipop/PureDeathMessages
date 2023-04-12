@@ -5,7 +5,6 @@ const mapData = (new JsonConfigFile('plugins/death.message/resources/map.json'))
 const defaultEntityEmoji = (new JsonConfigFile('plugins/death.message/resources/emoji.json')).get("defaultEntity")
 const entityEmoji = (new JsonConfigFile('plugins/death.message/resources/emoji.json')).get("entity")
 const deathMessageEmoji = (new JsonConfigFile('plugins/death.message/resources/emoji.json')).get("deathMessage")
-const enabledEntity = config.get('enabledEntity')
 const defaultEnabledEntity = {
     "minecraft:cat": true,
     "minecraft:donkey": true,
@@ -14,22 +13,27 @@ const defaultEnabledEntity = {
     "minecraft:player": true,
     "minecraft:wolf": true
 }
-const enableMobCustomName = config.get('enableMobCustomName')
-const enableItemCustomName = config.get('enableItemCustomName')
-const enableEmoji = config.get('enableEmoji')
-let lastDamageCause = {}
+const handlerConfigs = {
+    enabledEntity: config.get('enabledEntity'),
+    enableMobCustomName: config.get('enableMobCustomName'),
+    enableItemCustomName: config.get('enableItemCustomName'),
+    enableEmoji: config.get('enableEmoji'),
+    emojiSeparator: config.get('emojiSeparator')
+}
 
 ll.registerPlugin('death.message', '死亡信息转发', [1,0,0])
 logger.setConsole(config.get('isLogPrt'))
 logger.setFile(config.get('isLogFile') ? 'logs/death.message.log' : null)
 
 mc.listen('onMobHurt', (mob, source, damage, cause) => {
-    hurtEventHandler(mob, source, cause, enabledEntity, enableItemCustomName)
+    hurtEventHandler(mob, source, cause, handlerConfigs)
 })
 mc.listen('onMobDie', (mob, source, cause) => {
-    const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData, enabledEntity, enableMobCustomName, enableEmoji)
+    const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData, handlerConfigs)
     if(msg) logger.info(msg)
 })
+
+let lastDamageCause = {}
 
 function stringFormat(str, args) {
     const regex = /%s/
@@ -41,13 +45,24 @@ function isTamed(mob) {
     return mob.getNbt(mob.uniqueId)?.getTag('IsTamed').toString() === '1' ? true : false
 }
 
-function deathEventHandler(mob, source, cause, entity, message, map, enabledEntity = defaultEnabledEntity, enableMobCustomName = true, enableEmoji = false) {
+function deathEventHandler(mob, source, cause, entity, message, map, config) {
+    const enabledEntity = config?.enabledEntity ?? {
+        "minecraft:cat": true,
+        "minecraft:donkey": true,
+        "minecraft:horse": true,
+        "minecraft:mule": true,
+        "minecraft:player": true,
+        "minecraft:wolf": true
+    }
+    const enableMobCustomName = config?.enableMobCustomName ?? true
+    const enableEmoji = config?.enableEmoji ?? false
+    const emojiSeparator = config?.emojiSeparator ?? '  '
     function getCustomName(mob) {
         return enableMobCustomName ? mob.getNbt().getTag('CustomName')?.toString() : null
     }
     let msg = null
     let args = []
-    let emoji = ['','','']
+    let emoji = ['','','', emojiSeparator]
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return null }
 
     if(enableMobCustomName) {
@@ -103,7 +118,16 @@ function deathEventHandler(mob, source, cause, entity, message, map, enabledEnti
     return (enableEmoji ? emoji.join('') : '') + stringFormat(msg, args)
 }
 
-function hurtEventHandler(mob, source, cause, enabledEntity = defaultEnabledEntity, enableItemCustomName = true) {
+function hurtEventHandler(mob, source, cause, config) {
+    const enabledEntity = config?.enabledEntity ?? {
+        "minecraft:cat": true,
+        "minecraft:donkey": true,
+        "minecraft:horse": true,
+        "minecraft:mule": true,
+        "minecraft:player": true,
+        "minecraft:wolf": true
+    }
+    const enableItemCustomName = config?.enableItemCustomName ?? true
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return }
     delete lastDamageCause[mob.uniqueId]
     if(source?.isPlayer() && cause === 2) {
