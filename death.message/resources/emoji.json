@@ -1,5 +1,5 @@
 {
-    "defaultEntity": "🧟",
+    "defaultEntity": "😶",
     "entity": {
         "minecraft:player": "🎮",
         "minecraft:allay": "🧚",
@@ -143,7 +143,6 @@
     "deathMessage": {
         "exception": {
             "minecraft:blaze": {"3": "🔥"},
-            "minecraft:sweet_berry_bush": {"1": "🍒"},
             "minecraft:drowned": {"3": "🔱"},
             "minecraft:evocation_illager": {"14": "✂"},
             "minecraft:ghast": {"3": "💥"},
@@ -151,7 +150,8 @@
             "minecraft:player": {"14": "🧪"},
             "minecraft:shulker": {"3": "🪃"},
             "minecraft:small_fireball": {"3": "🔥"},
-            "minecraft:witch": {"14": "🧪"}
+            "minecraft:witch": {"14": "🧪"},
+            "minecraft:sweet_berry_bush": {"1": "🍒"}
         },
         "-1": "☠",
         "0": "☠",

@@ -12,7 +12,8 @@
             "minecraft:shulker": {"3": "death.attack.bullet"},
             "minecraft:small_fireball": {"3": "death.attack.mob"},
             "minecraft:warden": { "31": "death.attack.sonicBoom.player"},
-            "minecraft:witch": {"14": "death.attack.indirectMagic"}
+            "minecraft:witch": {"14": "death.attack.indirectMagic"},
+            "minecraft:sweet_berry_bush": {"1": "death.attack.sweetBerry"}
         },
         "-1": "death.attack.generic",
         "0": "death.attack.generic",
