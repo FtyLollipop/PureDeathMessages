@@ -60,9 +60,11 @@ function deathEventHandler(mob, source, cause, entity, message, map, config) {
     function getCustomName(mob) {
         return enableMobCustomName ? mob.getNbt().getTag('CustomName')?.toString() : null
     }
+
     let msg = null
     let args = []
     let emoji = ['','','', emojiSeparator]
+
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return null }
 
     if(enableMobCustomName) {
@@ -115,6 +117,7 @@ function deathEventHandler(mob, source, cause, entity, message, map, config) {
     if(!emoji[1]) {
         emoji[1] = deathMessageEmoji[cause] ?? deathMessageEmoji['0']
     }
+
     return (enableEmoji ? emoji.join('') : '') + stringFormat(msg, args)
 }
 
@@ -128,6 +131,7 @@ function hurtEventHandler(mob, source, cause, config) {
         "minecraft:wolf": true
     }
     const enableItemCustomName = config?.enableItemCustomName ?? true
+
     if(!enabledEntity[mob.type] || (!mob.isPlayer() && !isTamed(mob))) { return }
     delete lastDamageCause[mob.uniqueId]
     if(source?.isPlayer() && cause === 2) {
