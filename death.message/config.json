@@ -12,9 +12,8 @@
     "enableItemCustomName": true,
     "emoji": {
         "separator": "  ",
-        "console": false,
-        "file": false,
-        "listener": false
+        "show": false,
+        "api": false
     },
     "logToConsole": true,
     "logToFile": true
