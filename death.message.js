@@ -14,7 +14,7 @@ const defaultEntityEmoji = emoji.get("defaultEntity")
 const entityEmoji = emoji.get("entity")
 const deathMessageEmoji = emoji.get("deathMessage")
 
-ll.registerPlugin('DeathMessages', '死亡消息输出', [1, 0, 0])
+ll.registerPlugin('DeathMessages', 'Output death messages.', [1, 0, 0])
 logger.setConsole(config.get('logToConsole'))
 logger.setFile(config.get('logToFile') ? 'logs/DeathMessages.log' : null)
 
