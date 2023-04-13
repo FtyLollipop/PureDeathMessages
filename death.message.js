@@ -118,7 +118,7 @@ function deathEventHandler(mob, source, cause, entity, message, map, config) {
     }
 
     if (!msg) {
-        msg = message?.[map?.[cause]] ?? `${message['death.attack.generic']} %插件消息数据需要更新 source:${args[0]} cause:${cause}%`
+        msg = message?.[map?.[cause]] ?? `${message['death.attack.generic']} %Plugin data need to update * source:${args[0]} cause:${cause}%`
     }
     if (!emoji[1]) {
         emoji[1] = deathMessageEmoji[cause] ?? deathMessageEmoji['0']
