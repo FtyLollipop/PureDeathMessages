@@ -1,4 +1,4 @@
-const config = new JsonConfigFile('plugins/nodejs/sparkbridge/plugins/death.message/config.json')
+const config = new JsonConfigFile('plugins/nodejs/sparkbridge/plugins/spark.pure.death.adapter/config.json')
 ll.require('PureDeathMessages.js')
 const registerListener = ll.import('PureDeathMessages', 'registerListener')
 
