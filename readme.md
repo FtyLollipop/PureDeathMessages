@@ -1,1 +1,1 @@
-# death.message 死亡消息转发
+# PureDeathMessages 死亡消息输出

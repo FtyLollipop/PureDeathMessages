@@ -1,28 +1,28 @@
-const config = new JsonConfigFile('plugins/death.message/config.json')
+const config = new JsonConfigFile('plugins/PureDeathMessages/config.json')
 const enabledEntity = config.get('enabledEntity')
 const enableMobCustomName = config.get('enableMobCustomName')
 const enableItemCustomName = config.get('enableItemCustomName')
 const emojiConfig = config.get('emoji')
 const emojiSeparator = emojiConfig.separator
 
-const entity = (new JsonConfigFile(`plugins/death.message/resources/entity.json`)).get(config.get('lang'))
-const message = (new JsonConfigFile(`plugins/death.message/resources/message.json`)).get(config.get('lang'))
-const map = (new JsonConfigFile('plugins/death.message/resources/map.json')).get("map")
+const entity = (new JsonConfigFile(`plugins/PureDeathMessages/resources/entity.json`)).get(config.get('lang'))
+const message = (new JsonConfigFile(`plugins/PureDeathMessages/resources/message.json`)).get(config.get('lang'))
+const map = (new JsonConfigFile('plugins/PureDeathMessages/resources/map.json')).get("map")
 
-const emoji = new JsonConfigFile('plugins/death.message/resources/emoji.json')
+const emoji = new JsonConfigFile('plugins/PureDeathMessages/resources/emoji.json')
 const defaultEntityEmoji = emoji.get("defaultEntity")
 const entityEmoji = emoji.get("entity")
 const deathMessageEmoji = emoji.get("deathMessage")
 
-ll.registerPlugin('DeathMessages', 'Output death messages.', [1, 0, 0])
+ll.registerPlugin('PureDeathMessages', 'Output death messages.', [1, 0, 0])
 logger.setConsole(config.get('logToConsole'))
-logger.setFile(config.get('logToFile') ? 'logs/DeathMessages.log' : null)
+logger.setFile(config.get('logToFile') ? 'logs/PureDeathMessages.log' : null)
 
 let listenerFunctions = []
 let registerListener = function(namespace, name) {
     listenerFunctions.push(ll.import(namespace, name))
 }
-ll.exports(registerListener, 'death.message', 'registerListener')
+ll.exports(registerListener, 'PureDeathMessages', 'registerListener')
 
 mc.listen('onMobHurt', (mob, source, damage, cause) => {
     hurtEventHandler(mob, source, cause)
