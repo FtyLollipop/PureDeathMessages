@@ -19,6 +19,12 @@ ll.registerPlugin('death.message', '死亡信息转发', [1, 0, 0])
 logger.setConsole(config.get('isLogPrt'))
 logger.setFile(config.get('isLogFile') ? 'logs/death.message.log' : null)
 
+let listenerFunctions = []
+let registerListener = function(namespace, name) {
+    listenerFunctions.push(ll.import(namespace, name))
+}
+ll.exports(registerListener, 'death.message', 'registerListener')
+
 mc.listen('onMobHurt', (mob, source, damage, cause) => {
     hurtEventHandler(mob, source, cause, handlerConfigs)
 })
@@ -26,6 +32,9 @@ mc.listen('onMobDie', (mob, source, cause) => {
     const msg = deathEventHandler(mob, source, cause, entityData, messageData, mapData, handlerConfigs)
     if (msg) {
         logger.info(msg.join(''))
+        listenerFunctions.forEach(func => {
+            func(msg.join(''))
+        })
     }
 })
 
