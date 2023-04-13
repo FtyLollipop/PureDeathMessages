@@ -2,17 +2,17 @@ const config = new JsonConfigFile('plugins/death.message/config.json')
 const enabledEntity = config.get('enabledEntity')
 const enableMobCustomName = config.get('enableMobCustomName')
 const enableItemCustomName = config.get('enableItemCustomName')
+const emojiConfig = config.get('emoji')
+const emojiSeparator = emojiConfig.separator
 
 const entity = (new JsonConfigFile(`plugins/death.message/resources/entity.json`)).get(config.get('lang'))
 const message = (new JsonConfigFile(`plugins/death.message/resources/message.json`)).get(config.get('lang'))
 const map = (new JsonConfigFile('plugins/death.message/resources/map.json')).get("map")
+
 const emoji = new JsonConfigFile('plugins/death.message/resources/emoji.json')
 const defaultEntityEmoji = emoji.get("defaultEntity")
 const entityEmoji = emoji.get("entity")
 const deathMessageEmoji = emoji.get("deathMessage")
-
-const emojiConfig = config.get('emoji')
-const emojiSeparator = emojiConfig.separator
 
 ll.registerPlugin('DeathMessages', '死亡消息输出', [1, 0, 0])
 logger.setConsole(config.get('logToConsole'))
