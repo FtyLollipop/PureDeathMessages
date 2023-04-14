@@ -1,0 +1,5 @@
+1. 将spark.pure.death.adapter文件夹放进 BDS根目录\plugins\nodejs\sparkbridge\plugins 目录中。
+2. 完全启动一次BDS后关闭。
+3. 修改位于 BDS根目录\plugins\sparkbridge\spark.pure.death.adapter 目录中的配置文件config.json。
+    配置文件说明：groups要转发的群号，多个用英文逗号隔开，如[12345678,87654321]
+4. 启动BDS。

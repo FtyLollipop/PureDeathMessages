@@ -15,6 +15,7 @@
         "show": false,
         "api": false
     },
+    "followGamerule": true,
     "logToConsole": true,
     "logToFile": true
 }

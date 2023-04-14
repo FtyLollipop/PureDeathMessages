@@ -1,0 +1,4 @@
+1. 将PureDeathMessagesAdapter.js和PureDeathMessagesAdapter文件夹放进 BDS根目录\YoyoRobot 目录中。
+2. 修改PureDeathMessagesAdapter文件夹中的配置文件config.json。
+    配置文件说明：groups要转发的群号，多个用英文逗号隔开，如[12345678,87654321]
+3. 启动BDS。

@@ -1,0 +1,3 @@
+1. 将PureDeathMessagesAdapter.js放进 BDS根目录\plugins 目录中。
+2. 将PureDeathMessages插件配置文件中的followGamerule配置项改为false。注意，这样做将会让PureDeathMessages插件是否输出不再跟随gamerule的showdeathmessages，但是必须而为。
+3. 启动BDS。

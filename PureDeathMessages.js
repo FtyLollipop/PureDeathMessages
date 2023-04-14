@@ -4,6 +4,7 @@ const enableMobCustomName = config.get('enableMobCustomName')
 const enableItemCustomName = config.get('enableItemCustomName')
 const emojiConfig = config.get('emoji')
 const emojiSeparator = emojiConfig.separator
+const followGamerule = config.get('followGamerule')
 
 const entity = (new JsonConfigFile(`plugins/PureDeathMessages/assets/entity.json`)).get(config.get('lang'))
 const message = (new JsonConfigFile(`plugins/PureDeathMessages/assets/message.json`)).get(config.get('lang'))
@@ -19,7 +20,7 @@ logger.setConsole(config.get('logToConsole'))
 logger.setFile(config.get('logToFile') ? 'logs/PureDeathMessages.log' : null)
 
 let listenerFunctions = []
-let registerListener = function(namespace, name) {
+let registerListener = function (namespace, name) {
     listenerFunctions.push(ll.import(namespace, name))
 }
 ll.exports(registerListener, 'PureDeathMessages', 'registerListener')
@@ -50,7 +51,7 @@ function isTamed(mob) {
 }
 
 function deathEventHandler(mob, source, cause) {
-    if (mc.runcmdEx('gamerule showdeathmessages').output.match(/true|false/).toString() === 'false') { return null }
+    if (followGamerule && mc.runcmdEx('gamerule showdeathmessages').output.match(/true|false/).toString() === 'false') { return null }
     function getCustomName(mob) {
         return enableMobCustomName ? mob.getNbt().getTag('CustomName')?.toString() : null
     }
