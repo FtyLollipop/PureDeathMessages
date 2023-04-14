@@ -44,8 +44,8 @@
 - `enableItemCustomName`：是否启用物品的自定义名称。`true`为是，`false`为否。启用时，如果玩家使用了用铁砧重命名后的物品击杀了生物或其他玩家，则优先使用重命名后的名称，否则不使用。
 - `enableEmoji`：是否启用emoji，`true`为是，`false`为否。启用时，每一条死亡信息开头都会带上与死亡消息内容有关联的2-3个emoji表情（emoji部分不会输出到控制台和日志文件）。
 - `emojiSeparator`：emoji和死亡消息之间的分隔符。
-- `isLogPrt`: 死亡消息是否输出到控制台。`true`为是，`false`为否。
-- `isLogFile`: 死亡消息是否输出到日志文件。`true`为是，`false`为否。日志文件路径：`BDS根目录\logs\death.message.log`。
+- `logToConsole`: 死亡消息是否输出到控制台。`true`为是，`false`为否。
+- `logToFile`: 死亡消息是否输出到日志文件。`true`为是，`false`为否。日志文件路径：`BDS根目录\logs\PureDeathMessages.log`。
 
 ## 已知问题
 
@@ -53,122 +53,11 @@
 
 有特殊死亡情况可能未手动覆盖到，请在GitHub提交[issue](https://github.com/FtyLollipop/spark-death-message/issues)。
 
-## 移植指南
-
-⚠️警告：本插件目前尚于测试阶段，可能会频繁更新甚至更改文件夹、配置文件结构，如需稳定版本敬请等待v1.0.0版本。
+## API指南
 
 本插件可以方便地移植到其他群服互通机器人（Javascript，其他语言需要自行修改函数），您只需要：
 
 1. 下载最新的源代码。
-
-2. 导入数据配置文件，注意文件路径。
-
-   示例伪代码：
-
-   ```javascript
-   const entityData = 读取文件('entity.json')['bedrock']
-   const messageData = 读取文件('message.json')['bedrock']
-   const mapData = 读取文件('map.json')['map']
-   const defaultEntityEmoji = 读取文件('emoji.json')['defaultEntity']
-   const entityEmoji = 读取文件('emoji.json')['entity']
-   const deathMessageEmoji = 读取文件('emoji.json')['deathMessage']
-   ```
-
-   本插件使用LiteLoaderBDS提供的配置文件API`JsonConfigFile`，您也可以直接复制修改路径后使用。
-
-3. 完整复制`let lastDamageItemName = {}`、`stringFormat`函数、`isTamed`函数、`deathEventHandler`函数和`hurtEventHandler`函数。
-
-4. 在您自己的插件中使用LiteLoaderBDS提供的事件监听API`mc.listen`监听`onMobDie`事件，并在回调函数中调用`hurtEventHandler`函数，用法为：`hurtEventHandler(mob, source, cause, config)`
-
-   - 参数:
-
-     - mob : `Entity`
-
-       `mc.listen`回调函数接收的mob参数
-
-     - source : `Entity`
-
-       `mc.listen`回调函数接收的source参数
-
-     - cause : `Integer`
-
-       `mc.listen`回调函数接收的cause参数
-
-     - config: `Object`
-
-       配置项，可选。用于配置工作方式，默认为：
-
-       ```javascript
-       {
-           enabledEntity: {  // 启用死亡消息的实体列表，应来自配置文件
-           	"minecraft:cat": true,
-               "minecraft:donkey": true,
-               "minecraft:horse": true,
-               "minecraft:mule": true,
-               "minecraft:player": true,
-               "minecraft:wolf": true
-           },
-           enableItemCustomName: true,  // 是否启用自定义物品名称，应来自配置文件
-       }
-       ```
-
-5. 另外监听`onMobDie`事件，并在回调函数中调用`deathEventHandler`函数，用法为：
-
-   `deathEventHandler(mob, source, cause, entity, message, map, config)`
-
-   - 参数:
-
-     - mob : `Entity`
-
-       `mc.listen`回调函数接收的mob参数
-
-     - source : `Entity`
-
-       `mc.listen`回调函数接收的source参数
-
-     - cause : `Integer`
-
-       `mc.listen`回调函数接收的cause参数
-
-     - entity : `Object`
-
-       实体翻译数据，应来自文件
-
-     - message : `Object`
-
-       死亡消息翻译数据，应来自文件
-
-     - map : `Object`
-
-       死亡消息数据映射数据，应来自文件
-
-     - config : `Object`
-
-       配置项，可选。用于配置工作方式，默认为：
-
-       ```javascript
-       {
-           enabledEntity: {  // 启用死亡消息的实体列表，应来自配置文件
-           	"minecraft:cat": true,
-               "minecraft:donkey": true,
-               "minecraft:horse": true,
-               "minecraft:mule": true,
-               "minecraft:player": true,
-               "minecraft:wolf": true
-           },
-           enableMobCustomName: true,  // 是否启用自定义生物名称，应来自配置文件
-           enableEmoji: false,  // 是否启用emoji，应来自配置文件
-           emojiSeparator: '  '  // emoji和死亡消息之间的分隔符，应来自配置文件
-       }
-       ```
-
-   - 返回值: 死亡消息文本数组，结构为`['emoji', '分隔符', '死亡消息']`，若未启用emoji则前两项均为`''`，若死亡的实体不在启用的实体列表里则为`null`
-
-   - 返回值类型: `Array`
-
-6. 若`deathEventHandler`函数的返回值不为`null`，则将返回值使用机器人发送。
-
-   使用示例伪代码：
 
    ```javascript
    function 插件主函数() {
@@ -181,6 +70,7 @@
        })
    }
    ```
+
 
 ## 协议
 
