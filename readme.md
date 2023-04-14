@@ -1,13 +1,13 @@
 # PureDeathMessages 死亡消息输出
 
-死亡消息输出插件，支持多种可自定义的配置项，并提供API导出供其他插件监听，您可以：
+适用于[LiteLoaderBDS](https://github.com/LiteLDev/LiteLoaderBDS)的死亡消息输出插件，支持多种可自定义的配置项，并提供API导出供其他插件监听，您可以：
 
 - 在群内看到基岩版内原汁原味的死亡消息，包括已驯服生物
 - 可选使用基岩版或Java版翻译
 - 配置哪些实体不转发死亡消息
 - 屏蔽实体或物品的自定义名称，防止敏感词汇被意外转发到群内
 - 可选启用emoji，使消息更生动，可自行更改文件以自定义emoji列表
-- 将游戏规则`showdeathmessages`设为`false`时，死亡消息转发将像游戏内一样暂时停止
+- 将游戏规则`showdeathmessages`设为`false`时，死亡消息转发可以像游戏内一样暂时停止
 - 在您自己的插件里使用本插件导出的API监听并使用输出的死亡消息
 
 最新支持的Minecraft Bedrock版本：1.19.x
@@ -38,7 +38,7 @@
 
 配置文件为`config.json`，如果需要原汁原味的基岩版死亡消息，则除群号外无需改动任何配置项。
 
-- `lang`：死亡消息内容**翻译**遵循的语言，`"bedrock"`为基岩版翻译，`"java"`为Java版翻译，`"en_US"`为英文。Java版翻译建议配合镐老板的[基岩版译名修正包](https://github.com/ff98sha/mclangcn)食用。
+- `lang`：死亡消息内容遵循的语言，`"bedrock"`为基岩版中文翻译，`"java"`为Java版中文翻译，`"en_US"`为英文。Java版翻译建议配合镐老板的[基岩版译名修正包](https://github.com/ff98sha/mclangcn)食用。
 - `enabledEntity`：启用死亡消息的实体列表，在对应生物的命名空间ID后设定是否启用。`true`为是，`false`为否。
 - `enableMobCustomName`：是否启用生物的自定义名称。`true`为是，`false`为否。启用时，如果被驯服的生物死亡，拥有使用命名牌自定义的名称则优先使用名称，否则不使用。
 - `enableItemCustomName`：是否启用物品的自定义名称。`true`为是，`false`为否。启用时，如果玩家使用了用铁砧重命名后的物品击杀了生物或其他玩家，则优先使用重命名后的名称，否则不使用。
@@ -83,7 +83,7 @@
 
 有特殊死亡情况可能未手动覆盖到，请在GitHub提交[issue](https://github.com/FtyLollipop/spark-death-message/issues)。
 
-## API指南
+## API使用指南
 
 本插件提供API导出供其他插件使用，以Javascript插件为例：
 
