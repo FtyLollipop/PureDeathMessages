@@ -36,7 +36,7 @@
 
 ## 配置
 
-配置文件为`config.json`，如果需要原汁原味的基岩版死亡消息，则除群号外无需改动任何配置项。
+配置文件为`config.json`，如果需要原汁原味的基岩版死亡消息，则无需改动任何配置项。
 
 - `lang`：死亡消息内容遵循的语言，`"bedrock"`为基岩版中文翻译，`"java"`为Java版中文翻译，`"en_US"`为英文。Java版翻译建议配合镐老板的[基岩版译名修正包](https://github.com/ff98sha/mclangcn)食用。
 - `enabledEntity`：启用死亡消息的实体列表，在对应生物的命名空间ID后设定是否启用。`true`为是，`false`为否。
