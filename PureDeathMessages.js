@@ -2,8 +2,9 @@ const config = new JsonConfigFile('plugins/PureDeathMessages/config.json')
 const enabledEntity = config.get('enabledEntity')
 const enableMobCustomName = config.get('enableMobCustomName')
 const enableItemCustomName = config.get('enableItemCustomName')
-const emojiConfig = config.get('emoji')
-const emojiSeparator = emojiConfig.separator
+const outputEmoji = config.get('outputEmoji')
+const apiEmoji = config.get('apiEmoji')
+const emojiSeparator = config.get('emojiSeparator')
 const followGamerule = config.get('followGamerule')
 
 const entity = (new JsonConfigFile(`plugins/PureDeathMessages/assets/entity.json`)).get(config.get('lang'))
@@ -31,9 +32,9 @@ mc.listen('onMobHurt', (mob, source, damage, cause) => {
 mc.listen('onMobDie', (mob, source, cause) => {
     const msg = deathEventHandler(mob, source, cause)
     if (msg) {
-        logger.info(emojiConfig.show ? msg.join('') : msg[2])
+        logger.info(outputEmoji ? msg.join('') : msg[2])
         listenerFunctions.forEach(func => {
-            func(emojiConfig.api ? msg.join('') : msg[2])
+            func(apiEmoji ? msg.join('') : msg[2])
         })
     }
 })

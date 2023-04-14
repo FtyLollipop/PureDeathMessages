@@ -10,11 +10,9 @@
     },
     "enableMobCustomName": true,
     "enableItemCustomName": true,
-    "emoji": {
-        "separator": "  ",
-        "show": false,
-        "api": false
-    },
+    "emojiSeparator": "  ",
+    "outputEmoji": false,
+    "apiEmoji": false,
     "followGamerule": true,
     "logToConsole": true,
     "logToFile": true
