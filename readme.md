@@ -81,7 +81,7 @@
 
 死亡消息是否输出跟随gamerule功能使用LiteLoaderBDS的API`mc.runcmdEx`判断实现，虽然命令执行结果不会显示在控制台，但有些插件可能会捕获该消息并予以显示，如果对您有影响，请将配置项的`followGamerule`设为`false`。
 
-有特殊死亡情况可能未手动覆盖到，请在GitHub提交[issue](https://github.com/FtyLollipop/spark-death-message/issues)。
+有特殊死亡情况可能未手动覆盖到，请在GitHub提交[issue](https://github.com/FtyLollipop/PureDeathMessages/issues)。
 
 ## API使用指南
 
