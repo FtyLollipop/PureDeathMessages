@@ -16,7 +16,7 @@ const defaultEntityEmoji = emoji.get("defaultEntity")
 const entityEmoji = emoji.get("entity")
 const deathMessageEmoji = emoji.get("deathMessage")
 
-ll.registerPlugin('PureDeathMessages', 'Output death messages.', [1, 0, 0])
+ll.registerPlugin('PureDeathMessages', 'Output death messages.', [1, 0, 1])
 logger.setConsole(config.get('logToConsole'))
 logger.setFile(config.get('logToFile') ? 'logs/PureDeathMessages.log' : null)
 
@@ -66,7 +66,11 @@ function deathEventHandler(mob, source, cause) {
     if (enableMobCustomName) {
         args.push(getCustomName(mob) ?? entity?.[mob.type] ?? mob.name)
     } else {
-        args.push(entity?.[mob.type] ?? mob.type)
+        if(mob.type === 'minecraft:player') {
+            args.push(mob.name)
+        } else {
+            args.push(entity?.[mob.type] ?? mob.type)
+        }
     }
     emoji[2] = entityEmoji[mob.type] ?? defaultEntityEmoji
 
@@ -74,7 +78,11 @@ function deathEventHandler(mob, source, cause) {
         if (enableMobCustomName) {
             args.push(getCustomName(source) ?? entity?.[source.type] ?? source.name)
         } else {
-            args.push(entity?.[source.type] ?? getCustomName(source) ? source.type : source.name)
+            if(source.type === 'minecraft:player') {
+                args.push(source.name)
+            } else {
+                args.push(entity?.[source.type] ?? (getCustomName(source) ? source.type : source.name))
+            }
         }
         emoji[0] = entityEmoji[source.type] ?? defaultEntityEmoji
         emoji[1] = deathMessageEmoji.exception?.[source.type]?.[cause]
